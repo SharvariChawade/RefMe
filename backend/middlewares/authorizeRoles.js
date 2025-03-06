@@ -1,31 +1,5 @@
 import {User} from "../models/user.model.js";
 
-// const authorizeRoles =  (...allowedRoles) => {
-//     return async (req, res, next) => {
-//         try {
-//             const user = await User.findById(req.id);
-//             if(!user){
-//                 return res.status(404).json({
-//                     message: "User not found",
-//                     success: false
-//                 });
-//             }
-//             console.log(user,user.role);
-//             if (!allowedRoles.includes(user.role)) {
-//                 return res.status(403).json({
-//                     message: `Access denied: Insufficient permissions,req.user.role ${req.user.role }allowed roles ${req.user.role , allowedRoles}`,
-//                     success: false
-//                 });
-//             }
-//             next();
-//         }catch (error){
-//             console.log(error);
-//         }
-//     };
-// };
-
-// export default authorizeRoles;
-
 const authorizeRoles = (...allowedRoles) => {
     return async (req, res, next) => {
         try {
@@ -53,3 +27,29 @@ const authorizeRoles = (...allowedRoles) => {
 };
 
 export default authorizeRoles;
+
+// const authorizeRoles =  (...allowedRoles) => {
+//     return async (req, res, next) => {
+//         try {
+//             const user = await User.findById(req.id);
+//             if(!user){
+//                 return res.status(404).json({
+//                     message: "User not found",
+//                     success: false
+//                 });
+//             }
+//             console.log(user,user.role);
+//             if (!allowedRoles.includes(user.role)) {
+//                 return res.status(403).json({
+//                     message: `Access denied: Insufficient permissions,req.user.role ${req.user.role }allowed roles ${req.user.role , allowedRoles}`,
+//                     success: false
+//                 });
+//             }
+//             next();
+//         }catch (error){
+//             console.log(error);
+//         }
+//     };
+// };
+
+// export default authorizeRoles;

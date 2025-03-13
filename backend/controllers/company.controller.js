@@ -20,7 +20,7 @@ export const registerCompany = async (req,res) => {
         };
         company = await Company.create({
             name:companyName,
-            userId:req.id
+            employees:null
         });
         return res.status(201).json({
             message: "Company registered successfully",
@@ -104,8 +104,9 @@ export const getEmployeeByCompany = async (req,res) => {
                     message: "Company not found",
                     success: false
             })
-        }   
-        const employeeList = companyObj.employees;
+        }
+        console.log(companyObj); 
+        const employeeList = await User.find({"profile.company":companyObj});
         return res.status(201).json({
             message: "List of employees",
             employeeList,

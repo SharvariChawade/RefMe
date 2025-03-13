@@ -47,7 +47,7 @@ export const login = async (req,res) => {
                 success: false
             });
         };
-        let user = await User.findOne({email});
+        let user = await User.findOne({email}).populate("profile.company");
         if(!user){
             return res.status(400).json({
                 message: "Incorrect email",
@@ -73,14 +73,15 @@ export const login = async (req,res) => {
         }
         const token = await jwt.sign(tokenData, process.env.SECRET_KEY, {expiresIn:'1d'});
         
-        user = {
-            _id:user._id,
-            fullname:user.fullname,
-            email:user.email,
-            phoneNumber:user.phoneNumber,
-            role:user.role,
-            profile:user.profile
-        }
+        // user = {
+        //     _id:user._id,
+        //     fullname:user.fullname,
+        //     email:user.email,
+        //     phoneNumber:user.phoneNumber,
+        //     role:user.role,
+        //     profile:user.profile
+        // }
+        // user = await User.findById(userId).populate("profile.company");
         return res.status(200).cookie("token",token, {maxAge:1*24*60*60*1000, httpsOnly: true, sameSite: 'strict'}).json({
             message:`Welcome back ${user.fullname}`,
             user,
@@ -123,7 +124,7 @@ export const updateProfile = async (req,res) => {
             skillsArray = skills.split(",");
         }
         const userId = req.id;
-        let user = await User.findById(userId);
+        let user = await User.findById(userId).populate("profile.company");
         if(!user) {
             return res.status(400).json({
                 message: "User not found",
@@ -140,14 +141,14 @@ export const updateProfile = async (req,res) => {
                     success: false
                 })
             }
-            if(companyObj.employees.includes(userId)){
-                return res.status(400).json({
-                    message: "Cannot update company, user already an employee of this company",
-                    success: false
-                })
-            }
-            companyObj.employees.push(user);  
-            companyObj.save();
+            // if(companyObj.employees.includes(userId)){
+            //     return res.status(400).json({
+            //         message: "Cannot update company, user already an employee of this company",
+            //         success: false
+            //     })
+            // }
+            // companyObj.employees.push(user);  
+            // companyObj.save();
         }
         
         if(fullname) user.fullname = fullname;
@@ -167,6 +168,9 @@ export const updateProfile = async (req,res) => {
             role:user.role,
             profile:user.profile
         }
+
+        // user = await User.findById(userId).populate("profile.company");
+        console.log(user);
         return res.status(200).json({
             message: "Profile updated successfully",
             user,

@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import Navbar from '../shared/navbar'
+import Navbar from '../shared/Navbar'
 import { Label } from '../ui/label'
 import { Input } from '../ui/input'
 import { RadioGroup, RadioGroupItem } from '../ui/radio-group'
@@ -7,10 +7,15 @@ import { Button } from '../ui/button'
 import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { USER_API_END_POINT } from '@/utils/constant'
+import { useDispatch, useSelector } from 'react-redux'
+import { setLoading } from '@/redux/authSlice'
+import { Loader2 } from 'lucide-react'
 
 
 function Signup() {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const {loading} = useSelector(store=>store.auth)
     const [input, setInput] = useState({
         fullname: "",
         email: "",
@@ -24,6 +29,7 @@ function Signup() {
     const submitHandler = async (e) => {
         e.preventDefault();
         try{
+            dispatch(setLoading(true));
             const res = await axios.post(`${USER_API_END_POINT}/register`,input,{
                 headers:{"Content-Type":"application/json"},
                 withCredentials: true,
@@ -34,7 +40,9 @@ function Signup() {
             }
         }catch(error){
             console.log(error)
-        }        
+        }finally{
+            dispatch(setLoading(false));
+        }       
     }
     return (
         <div>
@@ -125,7 +133,9 @@ function Signup() {
 
                         </RadioGroup>
                     </div>
-                    <Button className="w-full bg-[#F99002]" type="submit">Sign Up!</Button>
+                    {
+                        loading ? <Button><Loader2 className='w-full my-2 bg-[#F99002] animate-spin' />Please Wait</Button> : <Button className="w-full my-2 bg-[#F99002]" type="submit">Sign Up!</Button>
+                    }
                     <div className='text-muted-foreground my-2'>
                         <span>Already have an account? <Link to="/login" className='text-[#F99002]'>Login here</Link></span>
                     </div>

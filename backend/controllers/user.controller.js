@@ -109,7 +109,7 @@ export const logout = async (req,res) => {
 
 export const updateProfile = async (req,res) => {
     try {
-        const {fullname,email,phoneNumber,bio,skills,company} = req.body;
+        const {fullname,email,phoneNumber,bio,skills,company,university} = req.body;
         const file = req.file;
         // if (!fullname || !email || !phoneNumber || !bio || !skills){
         //     return res.status(400).json({
@@ -156,7 +156,8 @@ export const updateProfile = async (req,res) => {
         if(phoneNumber) user.phoneNumber = phoneNumber;
         if(bio) user.profile.bio = bio;
         if(skills) user.profile.skills = skillsArray;
-        if(company) user.profile.company = companyObj;
+        if(company && user.role=="professional") user.profile.company = companyObj;
+        if(university && user.role=="student") user.profile.university = university;
         
         await user.save();
     
@@ -180,3 +181,4 @@ export const updateProfile = async (req,res) => {
         console.log(error);
     }
 }
+

@@ -6,6 +6,11 @@ const referralPost = new mongoose.Schema({
         ref: 'Company',
         required: true
     },
+    created_by:{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: true
+    },
     description: {
         type: String,
         required: true
@@ -17,11 +22,6 @@ const referralPost = new mongoose.Schema({
     location: [{
         type: String
     }],
-    created_by:{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
-        required: true
-    },
     referral_requests:[{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Application'

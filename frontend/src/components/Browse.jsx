@@ -2,7 +2,7 @@ import React from 'react'
 import Navbar from './shared/navbar'
 import Footer from './shared/footer'
 import ReferralPost from './ReferralPost';
-const randomJobs = [1, 2,45];
+const randomJobs = [1];
 
 
 const Browse = () => {

@@ -5,9 +5,8 @@ import { User } from "../models/user.model.js"
 
 export const requestReferral = async (req,res) => {
     try {
-        const referrer = req.params.id;
         const userId = req.id;
-        const { skills, resume, experience, short_description } = req.body;
+        const { skills, resume, experience, short_description, referrer } = req.body;
         if(!referrer){
             return res.status(400).json({
                 message: "No referrer found!",
@@ -81,8 +80,9 @@ export const applyReferralPost = async (req,res) => {
             experience: experience,
             short_description:short_description,
         }) 
-        post.referral_requests.push(newApplication._id);  
+        post.referral_requests.push(newApplication);  
         await post.save();
+
         return res.status(201).json({
             message: "Application Successful!",
             newApplication,

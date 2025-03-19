@@ -8,6 +8,8 @@ import ReferralPosts from './components/ReferralPosts'
 import Browse from './components/Browse'
 import { Profile } from './components/Profile'
 import PostDetails from './components/PostDetails'
+import CompanyPage from './components/CompanyPage'
+import Companies from './components/Companies'
 
 function App() {
 
@@ -25,7 +27,7 @@ function App() {
       path:'/referralposts',
       element: <ReferralPosts/>
     },{
-      path:'/postdetails/12345',
+      path:`/postdetails/:id`,
       element: <PostDetails/>
     },{
       path:'/browse',
@@ -33,6 +35,12 @@ function App() {
     },{
       path:'/profile',
       element: <Profile/>
+    },{
+      path:'/company/:id',
+      element: <CompanyPage/>
+    },{
+      path:'/companies',
+      element: <Companies />
     }
   ])
   return (

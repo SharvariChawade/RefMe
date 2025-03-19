@@ -2,17 +2,20 @@ import React from 'react'
 import { Button } from './ui/button'
 import { Avatar, AvatarImage } from './ui/avatar'
 import { Badge } from './ui/badge'
-import { Bookmark } from 'lucide-react'
+import { Bookmark, Briefcase } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 
-const ReferralPost =()=> {
-
-const job_id="12345";
-const navigate = useNavigate();
+const ReferralPost = ({ post }) => {
+    const navigate = useNavigate();
+    const timeago = (new Date()) - (new Date(post?.createdAt).getTime());
+    const days = 1000 * 60 * 60 * 24;
+    const hours = 1000 * 60 * 60 ;
     return (
         <div className='p-5 rounded-md shadow-xl bg-white border border-gray-100'>
             <div className='flex items-center justify-between'>
-                <p className='text-sm text-gray-500'>2 days ago</p>
+                {
+                    (Math.floor(timeago/days)==0)?(<p className='text-sm text-gray-500'>{Math.floor(timeago/hours)} Hours Ago</p>):(<p className='text-sm text-gray-500'>{Math.floor(timeago/days)} Days Ago</p>)
+                }
                 <Button variant="outline" className="rounded-full" size="icon"><Bookmark /></Button>
             </div>
 
@@ -22,23 +25,26 @@ const navigate = useNavigate();
                         <AvatarImage src="https://github.com/shadcn.png" />
                     </Avatar>
                 </Button>
-                <div>
-                    <h1 className='font-medium text-lg'>TIAA</h1>
-                    <p className='text-sm text-gray-500'>India</p>
+                <div className='flex justify-between py-2'>
+                    <h1 className='font-medium text-lg'>{post?.created_by?.fullname}</h1>
+                    <div className='flex justify-center '>
+                        <Badge className='font-bold' variant="ghost" style={{ padding: '0.5rem' }}><Briefcase className='mx-2' />{post?.company?.name}</Badge>
+                    </div>
                 </div>
             </div>
-
             <div>
-                <h1 className='font-bold text-lg my-2'>Analyst</h1>
-                <p className='text-sm text-gray-600'>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Doloribus officia aperiam eligendi nam, consequuntur aut maxime odit, amet harum doloremque, minima eos commodi consequatur corporis praesentium quisquam omnis aspernatur perferendis?</p>
+                <p className='text-gray-600'>{post?.description}</p>
+            </div>
+            <div className='my-2 flex'>
+                <p><span className='font-bold'>Requirements:</span><span className='text-gray-600'>{post?.requirements}</span></p>
+                {/* <span className='font-bold'>Requirements:</span><p className='text-gray-600'> {post?.requirements}</p> */}
             </div>
             <div className='flex items-center gap-2 mt-4'>
-                <Badge className={'text-[#000000] font-bold'} variant="ghost">2 Positions</Badge>
-                <Badge className={'text-[#000000] font-bold'} variant="ghost">Hybrid</Badge>
-                <Badge className={'text-[#000000] font-bold'} variant="ghost">10 LPA</Badge>
+                <Badge className={'text-[#000000] font-bold'} variant="ghost">{post?.location}</Badge>
+                <Badge className={'text-[#000000] font-bold'} variant="ghost">{post?.referral_requests.length} requests</Badge>
             </div>
             <div className='flex items-center gap-4 mt-4'>
-                <Button onClick={()=> navigate(`/postdetails/${job_id}`)} variant="outline">Details</Button>
+                <Button onClick={() => navigate(`/postdetails/${post?._id}`)} variant="outline">Details</Button>
                 <Button className="bg-[#F99002]">Save For Later</Button>
             </div>
         </div>

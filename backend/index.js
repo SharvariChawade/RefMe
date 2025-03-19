@@ -11,8 +11,9 @@ dotenv.config({});
 
 const app = express();
 
-app.use(express.json());
-app.use(express.urlencoded({extended:true}));
+// app.use(express.json());
+app.use(express.json({ limit: "50mb" })); // Increase limit
+app.use(express.urlencoded({extended:true, limit: "50mb" }));
 app.use(cookieParser());
 const corsOptions = {
     origin: 'http://localhost:5173',

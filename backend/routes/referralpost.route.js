@@ -7,6 +7,6 @@ const router = express.Router()
 
 router.route("/postreferral").post(isAuthenticated,authorizeRoles("professional"),postReferral);
 router.route("/getallreferralpost").get(isAuthenticated,getAllReferralPost);
-router.route("/getallreferralpost/:id").post(isAuthenticated,getReferralPostById);
+router.route("/getreferralpost/:id").get(isAuthenticated,getReferralPostById);
 
 export default router;

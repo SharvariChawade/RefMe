@@ -25,18 +25,23 @@ export const postReferral = async (req,res) => {
             })
         };
         const referralpost = await ReferralPost.create({
-            company: user.profile.company,
+            company: user.profile.company._id,
             description, 
             requirements, 
             location, 
-            created_by: userId 
+            created_by: user._id
         });
-        user.referralPost.push(referralpost);
-        user.save();
+        const post = await ReferralPost.findOne({_id:referralpost._id});
+
+        if (!user.referralPost) {
+            user.referralPost = [];
+        }
+        user.referralPost.push(post);
+        await user.save();
+
         return res.status(201).json({
             message: "Referral Post posted succesfully",
-            referralpost,
-            user,
+            post,
             success: true 
         })
     }
@@ -55,7 +60,8 @@ export const getAllReferralPost = async (req,res) => {
         };
         const posts = await ReferralPost.find(query).populate({
             path: "company"
-        }).sort({createdAt: -1});
+        }).
+        populate("created_by").sort({createdAt: -1});
         if(!posts){
             return res.status(404).json({
                 message: `No Referral Post found ${query} ${jobs}`,
@@ -74,7 +80,7 @@ export const getAllReferralPost = async (req,res) => {
 export const getReferralPostById = async (req,res) => {
     try {
         const postId = req.params.id;
-        const post = await ReferralPost.findById(postId);
+        const post = await ReferralPost.findById(postId).populate("created_by").populate("company").populate("referral_requests");
         if(!post){
             return res.status(404).json({
                 message: "No Referral Post found",

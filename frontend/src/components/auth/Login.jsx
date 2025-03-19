@@ -39,7 +39,8 @@ function Login() {
                     toast.success(res.data.message);
                 }
             }catch(error){
-                console.log(error)
+                console.log(error);
+                toast.error(error.response.data.message);
             }finally{
                 dispatch(setLoading(false));
             }
@@ -49,6 +50,7 @@ function Login() {
             <div>
                 <Navbar />
             </div>
+            
             <div className='flex items-center justify-center max-w-7xl mx-auto'>
                 <form onSubmit={submitHandler} className="w-1/2 border border-gray-200 rounded-md p-4 my-10">
                     <h1 className='text-xl mb-5 font-bold'>Login</h1>

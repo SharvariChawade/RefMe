@@ -1,38 +1,84 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Badge } from './ui/badge'
 import { Button } from './ui/button';
+import { useParams } from 'react-router-dom';
+import { REFERRALPOST_API_END_POINT } from '@/utils/constant';
+import axios from 'axios';
+import { useDispatch, useSelector } from 'react-redux';
+import { setSingleReferralPost } from '@/redux/referralpostSlice';
+import { toast } from 'sonner';
+import store from '@/redux/store';
+import { Briefcase } from 'lucide-react';
+import ApplyReferralPost from './ApplyReferralPost';
 
-const isApplied = false;
 const PostDetails = () => {
-  return (
-    <div className='max-w-7xl mx-auto my-10'>
-    <div className='flex items-center justify-between'>
-        <div>
-            <h1 className='font-bold text-xl'>Developer</h1>
-            <div className='flex items-center gap-2 mt-4'>
-                <Badge className={'text-blue-700 font-bold'} variant="ghost">10 Positions</Badge>
-                <Badge className={'text-[#F83002] font-bold'} variant="ghost">Hybrid</Badge>
-                <Badge className={'text-[#7209b7] font-bold'} variant="ghost">10LPA</Badge>
+    
+    const [open, setOpen] = useState(false);
+    const params = useParams();
+    const postId = params.id;
+    const { singlePost } = useSelector(store => store.referralpost)
+    const { user } = useSelector(store => store.auth)
+    const dispatch = useDispatch();
+    const isApplied = singlePost?.referral_requests?.some(referral_requests=>referral_requests.applicant === user?._id);
+
+    useEffect(() => {
+        const fetchSingleReferralPost = async () => {
+            try {
+                const res = await axios.get(`${REFERRALPOST_API_END_POINT}/getreferralpost/${postId}`, {
+                    withCredentials: true,
+                });
+                if (res.data.success) {
+                    dispatch(setSingleReferralPost(res.data.post));
+                }
+            } catch (error) {
+                console.error("Full error response:", error);
+                toast.error(error.response.data.message);
+                if (error.response) {
+                    console.error("Error Status:", error.response.status);
+                    console.error("Error Data:", error.response.data);
+                }
+            }
+        }
+        fetchSingleReferralPost();
+    }, [postId, dispatch, user?._id])
+
+    return (
+        <div className="max-w-4xl mx-auto my-10 p-6 bg-white shadow-lg rounded-lg">
+            {/* Header Section */}
+            <div className="flex items-center justify-between border-b pb-4">
+                <div>
+                    <h1 className="font-bold text-2xl text-gray-900">{singlePost?.created_by?.fullname}</h1>
+                    <div className="flex items-center mt-2">
+                        <Briefcase className="w-5 h-5 text-gray-500 mr-2" />
+                        <span className="font-medium text-lg">{singlePost?.company?.name}</span>
+                    </div>
+                </div>
+                <Button
+                    disabled={isApplied}
+                    onClick={isApplied ? undefined : () => setOpen(true)}
+                    className={`px-6 py-2 rounded-lg text-white font-semibold transition ${isApplied ? "bg-gray-400 cursor-not-allowed" : "bg-[#F99002] hover:bg-gray-400"
+                        }`}>
+                    {isApplied ? "Already Requested" : "Request Referral"}
+                </Button>
             </div>
+            <div className="mt-6 p-4 bg-gray-100 rounded-md">
+                <p className="mt-2 text-lg text-gray-700 leading-relaxed">
+                    {singlePost?.description || "No additional details provided for this job post."}
+                </p>
+            </div>
+            {/* Job Details Section */}
+            <div className="mt-6">
+                <h1 className="text-xl font-bold text-gray-900 border-b-2 pb-2">Description</h1>
+                <div className="mt-4 space-y-3 text-gray-800">
+                    <p><span className="font-semibold">Location:</span> {singlePost?.location}</p>
+                    <p><span className="font-semibold">Requirements:</span> {singlePost?.requirements}</p>
+                    <p><span className="font-semibold">Posted Date:</span> {new Date(singlePost?.createdAt).toLocaleString("en-US",{day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit", hour12: true})}</p>
+                    <p><span className="font-semibold">Total Requests:</span> {singlePost?.referral_requests.length} requests</p>
+                </div>
+            </div>
+            <ApplyReferralPost open={open} setOpen={setOpen} />
         </div>
-        <Button
-            disabled={isApplied}
-            className={`rounded-lg ${isApplied ? 'bg-gray-600 cursor-not-allowed' : 'bg-[#7209b7] hover:bg-[#5f32ad]'}`}>
-            {isApplied ? 'Already Applied' : 'Apply Now'}
-        </Button>
-    </div>
-    <h1 className='border-b-2 border-b-gray-300 font-medium py-4'>Job Description</h1>
-    <div className='my-4'>
-        <h1 className='font-bold my-1'>Role: <span className='pl-4 font-normal text-gray-800'>Developer</span></h1>
-        <h1 className='font-bold my-1'>Location: <span className='pl-4 font-normal text-gray-800'>India</span></h1>
-        <h1 className='font-bold my-1'>Description: <span className='pl-4 font-normal text-gray-800'>SDE with java background</span></h1>
-        <h1 className='font-bold my-1'>Experience: <span className='pl-4 font-normal text-gray-800'>5 yrs</span></h1>
-        <h1 className='font-bold my-1'>Salary: <span className='pl-4 font-normal text-gray-800'>10LPA</span></h1>
-        <h1 className='font-bold my-1'>Total Applicants: <span className='pl-4 font-normal text-gray-800'>100</span></h1>
-        <h1 className='font-bold my-1'>Posted Date: <span className='pl-4 font-normal text-gray-800'>12/03/2025</span></h1>
-    </div>
-</div>
-  )
+    )
 }
 
 export default PostDetails

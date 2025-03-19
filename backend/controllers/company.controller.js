@@ -105,7 +105,6 @@ export const getEmployeeByCompany = async (req,res) => {
                     success: false
             })
         }
-        console.log(companyObj); 
         const employeeList = await User.find({"profile.company":companyObj});
         return res.status(201).json({
             message: "List of employees",

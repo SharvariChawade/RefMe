@@ -22,7 +22,8 @@ export const UpdateProfileDialog = ({ open, setOpen }) => {
     phoneNumber: user?.phoneNumber || "",
     bio: user?.profile?.bio || "",
     skills: user?.profile?.skills?.map(skill => skill) || "",
-    company: user?.profile?.company?.name|| ""
+    company: user?.profile?.company?.name|| "",
+    university: user?.profile?.university || ""
 });
 
 const changeEventHandler = (e) => {
@@ -37,7 +38,9 @@ const submitHandler = async(e) => {
         formData.append("phoneNumber", input.phoneNumber);
         formData.append("bio", input.bio);
         formData.append("skills", input.skills);
-        formData.append("company", input.company);
+        if(user.role=="professional") {formData.append("company", input.company);}
+        if(user.role=="student") {formData.append("university", input.university);}
+
         // if (input.file) {
         //     formData.append("file", input.file);
         // }
@@ -124,7 +127,9 @@ const submitHandler = async(e) => {
                   className="col-span-3"
                 />
               </div>
-              <div className='grid grid-cols-4 items-center gap-4'>
+              {
+                (user.role=="professional")?(
+                  <div className='grid grid-cols-4 items-center gap-4'>
                 <Label htmlFor="company" className="text-right">Company</Label>
                 <Input
                   id="company"
@@ -134,6 +139,20 @@ const submitHandler = async(e) => {
                   className="col-span-3"
                 />
               </div>
+                ):(
+                <div className='grid grid-cols-4 items-center gap-4'>
+                <Label htmlFor="company" className="text-right">University</Label>
+                <Input
+                  id="university"
+                  name="university"
+                  value={input.university}
+                  onChange={changeEventHandler}
+                  className="col-span-3"
+                />
+              </div>
+                )
+              }
+              
             </div>
             <DialogFooter>
               {

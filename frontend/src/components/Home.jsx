@@ -4,8 +4,10 @@ import HeroSection from './HeroSection'
 import CategoryCarousel from './CategoryCarousel'
 import LatestPosts from './LatestPosts'
 import Footer from './shared/Footer'
+import useGetAllReferralPosts from '@/hooks/useGetAllReferralPosts'
 
 function Home() {
+  useGetAllReferralPosts();
   return (
     <div>
       <Navbar />

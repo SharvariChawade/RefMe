@@ -3,10 +3,13 @@ import Navbar from './shared/navbar'
 import Footer from './shared/footer'
 import FilterCard from './FilterCard';
 import ReferralPost from './ReferralPost';
+import { useSelector } from 'react-redux';
+import store from '@/redux/store';
 
 const jobsArray = [1];
 
 function ReferralPosts() {
+    const {allReferralPosts} = useSelector(store=>store.referralpost);
   return (
     <div>
         <Navbar/>
@@ -16,12 +19,12 @@ function ReferralPosts() {
                         <FilterCard />
                     </div>
                     {
-                        jobsArray.length <= 0 ? <span>Job not found</span> : (
+                        allReferralPosts.length <= 0 ? <span>Job not found</span> : (
                             <div className='flex-1 h-[88vh] overflow-y-auto pb-5'>
                                 <div className='grid grid-cols-3 gap-4'>
                                     {
-                                        jobsArray.map((job) => (
-                                                <ReferralPost/>
+                                        allReferralPosts.map((post) => (
+                                                <ReferralPost key={post._id} post={post}/>
                                         ))
                                     }
                                 </div>

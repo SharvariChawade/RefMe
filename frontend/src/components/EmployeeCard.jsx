@@ -1,14 +1,25 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "./ui/button";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import RequestReferralDialog from "./RequestReferralDialog";
+import { setRequested } from "@/redux/companiesSlice";
 
 const EmployeeCard = ({ employee }) => {
     const {user} = useSelector(store => store.auth);
     const [open, setOpen] = useState(false);
-    const requested =  user?.referralRequested?.some(applicationId =>
-        employee?.referralRequests?.includes(applicationId)
-    );
+    const {isRequested} = useSelector(store => store.companies);
+    const dispatch = useDispatch();
+    const requested = isRequested[employee._id] || false;
+
+    // ✅ Update Redux on component mount
+    useEffect(() => {
+        const alreadyRequested = user?.referralRequested?.some(applicationId =>
+            employee?.referralRequests?.includes(applicationId)
+        );
+        dispatch(setRequested({ employeeId: employee._id, status: alreadyRequested }));
+        console.log(isRequested);
+        
+    }, [dispatch, user, employee]);
     return (
         <div className="flex justify-between items-center p-4 border rounded-lg">
             <div>
@@ -27,7 +38,7 @@ const EmployeeCard = ({ employee }) => {
                     </Button>
                 ) :("")
             }
-            <RequestReferralDialog open={open} setOpen={setOpen} employee={employee}/>
+            <RequestReferralDialog open={open} setOpen={setOpen} employee={employee} />
         </div>
     );
 };

@@ -4,7 +4,8 @@ const companiesSlice = createSlice({
     name: "companies",
     initialState:{
         allCompanies:[],
-        employeesByCompany:[]
+        employeesByCompany:[],
+        isRequested: {}
     },reducers:{      
         setAllCompanies:(state,action) => {
             state.allCompanies = action.payload;
@@ -12,12 +13,15 @@ const companiesSlice = createSlice({
         setEmployeesByCompany:(state,action) => {
             state.employeesByCompany = action.payload;
         },
-        // setEmployeesByCompany: (state, action) => {
-        //     const { companyName, employeeList } = action.payload;
-        //     state.employeesByCompany[companyName] = employeeList; 
-        // }
+        // setRequested:(state,action) => {
+        //     state.isRequested = action.payload
+        // },
+        setRequested: (state, action) => {
+            const { employeeId, status } = action.payload;
+            state.isRequested[employeeId] = status;  // ✅ Update request status per employee
+        }
     }
 });
 
-export const {setAllCompanies,setEmployeesByCompany} = companiesSlice.actions;
+export const {setAllCompanies,setEmployeesByCompany,setRequested} = companiesSlice.actions;
 export default companiesSlice.reducer;

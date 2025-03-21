@@ -9,7 +9,7 @@ import { toast } from 'sonner'
 import { Button } from './ui/button'
 import { useParams } from 'react-router-dom'
 import { Loader2 } from 'lucide-react'
-import { APPLICATION_API_END_PONT, REFERRALPOST_API_END_POINT } from '@/utils/constant'
+import { REFERRALPOST_API_END_POINT } from '@/utils/constant'
 import { setSingleReferralPost } from '@/redux/referralpostSlice'
 
 
@@ -33,7 +33,7 @@ const ApplyReferralPost = ({ open, setOpen }) => {
         e.preventDefault();
         try {
             setLoading(true);
-            const res = await axios.post(`${APPLICATION_API_END_PONT}/applyreferralpost/${postId}`, input, {
+            const res = await axios.post(`${APPLICATION_API_END_POINT}/applyreferralpost/${postId}`, input, {
                 headers: {
                     'Content-Type': "application/json"
                 },

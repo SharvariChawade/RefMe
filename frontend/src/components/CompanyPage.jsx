@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { useParams } from "react-router-dom"; // To get company ID from URL
 import EmployeeCard from "./EmployeeCard";
@@ -5,8 +6,6 @@ import Navbar from "./shared/Navbar";
 import { useSelector } from "react-redux";
 import store from "@/redux/store";
 import useGetEmployeesByCompany from "@/hooks/useGetEmployeesByCompany";
-
-
 
 const CompanyPage = () => {
     const { id } = useParams(); 

@@ -105,7 +105,7 @@ export const getEmployeeByCompany = async (req,res) => {
                     success: false
             })
         }
-        const employeeList = await User.find({"profile.company":companyObj});
+        const employeeList = await User.find({"profile.company":companyObj}).populate("profile.company");
         return res.status(201).json({
             message: "List of employees",
             employeeList,

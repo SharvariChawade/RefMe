@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react'
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from './ui/dialog'
 import { Label } from './ui/label'
@@ -7,13 +8,18 @@ import store from '@/redux/store'
 import axios from 'axios'
 import { toast } from 'sonner'
 import { Button } from './ui/button'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { Loader2 } from 'lucide-react'
 import { APPLICATION_API_END_POINT } from '@/utils/constant'
+import useGetEmployeesByCompany from '@/hooks/useGetEmployeesByCompany'
+import CompanyPage from './CompanyPage'
+import { setRequested } from '@/redux/companiesSlice'
 
 const RequestReferralDialog = ({ open, setOpen, employee }) => {
-    const [loading, setLoading] = useState(false);
     const { user } = useSelector(store => store.auth);
+    const {isRequested} = useSelector(store => store.companies)
+    const [loading, setLoading] = useState(false);
+    const dispatch = useDispatch();
     const [input, setInput] = useState({
         skills:"",
         short_description: "",
@@ -25,36 +31,27 @@ const RequestReferralDialog = ({ open, setOpen, employee }) => {
     const changeEventHandler = (e) => {
         setInput({ ...input, [e.target.name]: e.target.value });
     }
-    console.log(input);
     const submitHandler = async (e) => {
         e.preventDefault();
         try {
             setLoading(true);
-            console.log("sending req");
-            
-            console.log(input);
             const res = await axios.post(`${APPLICATION_API_END_POINT}/requestref`, JSON.stringify(input), {
                 headers: {
                     'Content-Type': "application/json"
                 },
                 withCredentials: true
             });
-            console.log(res);
             if (res.data.success) {
-                // const updatedPost = await axios.get(`${REFERRALPOST_API_END_POINT}/requestreferral/${postId}`, { withCredentials: true });
-                // dispatch(setSingleReferralPost(updatedPost.data.post));
                 setOpen(false);
                 toast.success(res.data.message);
-                
+                dispatch(setRequested({ employeeId: employee._id, status: true })); 
             }
         } catch (error) {
-            console.log(error);
             toast.error(error.response.data.message);
         } finally {
             setLoading(false);
         }
-        
-        console.log(input);
+    
     }
     return (
         <div>

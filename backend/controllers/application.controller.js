@@ -29,11 +29,11 @@ export const requestReferral = async (req,res) => {
             short_description:short_description,
         })
         // updating profile of referrer
-        const referrerProfile = await User.findById(referrer);
+        const referrerProfile = await User.findById(referrer).populate("profile.company");
         referrerProfile.referralRequests.push(newReferralRequest); 
         await referrerProfile.save();
         // updating profile of referral requester
-        const referralReqProfile = await User.findById(userId);
+        const referralReqProfile = await User.findById(userId).populate("profile.company");
         referralReqProfile.referralRequested.push(newReferralRequest); 
         await referralReqProfile.save();
         return res.status(201).json({

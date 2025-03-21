@@ -73,15 +73,16 @@ export const login = async (req,res) => {
         }
         const token = await jwt.sign(tokenData, process.env.SECRET_KEY, {expiresIn:'1d'});
         
-        // user = {
-        //     _id:user._id,
-        //     fullname:user.fullname,
-        //     email:user.email,
-        //     phoneNumber:user.phoneNumber,
-        //     role:user.role,
-        //     profile:user.profile
-        // }
+        // // user = {
+        // //     _id:user._id,
+        // //     fullname:user.fullname,
+        // //     email:user.email,
+        // //     phoneNumber:user.phoneNumber,
+        // //     role:user.role,
+        // //     profile:user.profile
+        // // }
         // user = await User.findById(userId).populate("profile.company");
+        console.log(user);
         return res.status(200).cookie("token",token, {maxAge:1*24*60*60*1000, httpsOnly: true, sameSite: 'strict'}).json({
             message:`Welcome back ${user.fullname}`,
             user,

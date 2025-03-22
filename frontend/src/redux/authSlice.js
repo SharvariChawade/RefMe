@@ -12,9 +12,12 @@ const authSlice = createSlice({
         },
         setUser:(state,action) => {
             state.user = action.payload;
+        },
+        setRefRequested : (state , action) => {
+            state.user.referralRequested = action.payload;
         }
     }
 });
 
-export const {setLoading,setUser} = authSlice.actions;
+export const {setLoading,setUser , setRefRequested} = authSlice.actions;
 export default authSlice.reducer;

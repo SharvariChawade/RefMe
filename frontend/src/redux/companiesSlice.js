@@ -18,7 +18,10 @@ const companiesSlice = createSlice({
         // },
         setRequested: (state, action) => {
             const { employeeId, status } = action.payload;
-            state.isRequested[employeeId] = status;  // ✅ Update request status per employee
+            if(state.isRequested[employeeId]!=true){
+                state.isRequested[employeeId] = status; 
+            }
+             // ✅ Update request status per employee
         }
     }
 });

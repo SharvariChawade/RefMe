@@ -1,20 +1,31 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Navbar from './shared/navbar'
 import { Avatar, AvatarImage } from './ui/avatar';
 import { Badge } from './ui/badge';
 import { UpdateProfileDialog } from './UpdateProfileDialog';
 import { Label } from './ui/label';
 import { Briefcase, Building, Building2, Contact, GraduationCap, Mail, Pen } from 'lucide-react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Button } from './ui/button';
 import Footer from './shared/footer';
 import RequestedReferrals from './RequestedReferrals';
 import ReferralRequests from './ReferralRequests';
+import { setReferralRequested } from '@/redux/referralpostSlice';
 
 export const Profile = () => {
     const { user } = useSelector(store => store.auth);
     const [open, setOpen] = useState(false);
+    const dispatch = useDispatch()
+    
     // const isResume=user.profile.resume;
+    useEffect(()=>{
+        if(user?.referralRequested){
+            dispatch(setReferralRequested(user?.referralRequested));
+        }
+        
+    },[user,dispatch])
+    
+    const referralRequested = useSelector(store => store.referralpost?.referralRequested)
     return (
         <div>
             <Navbar />
@@ -79,7 +90,8 @@ export const Profile = () => {
                             <h1 className='font-bold text-lg my-5'>Requested Referrals</h1>
                         </div>
                         {/* Applied Job Table   */}
-                        <RequestedReferrals />
+                        <RequestedReferrals allReferralRequested={referralRequested} />
+                        
 
                     </div>
                     <div className='max-w-4xl shadow-xl mx-4 my-4 bg-white rounded-2xl'>

@@ -21,7 +21,7 @@ export const requestReferral = async (req,res) => {
             })
         }
         const newReferralRequest = await Application.create({
-            referrer: referrer,
+            referrer: referrer._id,
             applicant: userId,
             skills: skills,
             resume: resume,
@@ -73,8 +73,8 @@ export const applyReferralPost = async (req,res) => {
             })
         }
         const newApplication = await Application.create({
-            referral_post: postId,
-            applicant: userId,
+            referral_post: postId._id,
+            applicant: userId._id,
             skills: skills,
             resume: resume,
             experience: experience,

@@ -25,8 +25,7 @@ const RequestReferralDialog = ({ open, setOpen, employee }) => {
         short_description: "",
         resume:"",
         experience: "",
-        applicant: user._id,
-        referrer:employee._id
+        referrer:employee
     });
     const changeEventHandler = (e) => {
         setInput({ ...input, [e.target.name]: e.target.value });

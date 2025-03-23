@@ -1,33 +1,42 @@
 import React from 'react'
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from './ui/table'
 import { Badge } from './ui/badge';
+import { useSelector } from 'react-redux';
+import store from '@/redux/store';
 
 const allAppliedJobs = [{ "status": "pending" }];
-const RequestedReferrals = () => {
+const RequestedReferrals = ({allReferralRequested}) => { 
+    console.log(allReferralRequested);
     return (
         <div>
-            <Table>
+            {
+                allReferralRequested.length <=0 ? <div className='mx-2 my-2 px-2 py-2'><h1>You haven't requested referrals yet</h1></div> : 
+                (
+                    <Table>
                 <TableHeader>
                     <TableRow>
                         <TableHead>Date</TableHead>
-                        <TableHead>User</TableHead>
+                        <TableHead>Requested To</TableHead>
                         <TableHead>Company</TableHead>
                         <TableHead className="text-right">Status</TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
                     {
-                        allAppliedJobs.length <= 0 ? <span>You haven't applied any job yet.</span> : allAppliedJobs.map((appliedJob) => (
-                            <TableRow key="1234">
-                                <TableCell>12/03/25</TableCell>
-                                <TableCell>Analyst</TableCell>
-                                <TableCell>TIAA</TableCell>
-                                <TableCell className="text-right"><Badge className={`${appliedJob?.status === "rejected" ? 'bg-red-400' : appliedJob.status === 'pending' ? 'bg-gray-400' : 'bg-green-400'}`}>{appliedJob.status.toUpperCase()}</Badge></TableCell>
+                        allReferralRequested.map((application) => (
+                            <TableRow key={application._id}>
+                                <TableCell>{application.createdAt}</TableCell>
+                                <TableCell>{application.referrer}</TableCell>
+                                <TableCell>{application.referrer.profile}</TableCell>
+                                <TableCell className="text-right"><Badge className={`${application?.status === "rejected" ? 'bg-red-400' : application.status === 'pending' ? 'bg-gray-400' : 'bg-green-400'}`}>{application.status.toUpperCase()}</Badge></TableCell>
                             </TableRow>
                         ))
                     }
                 </TableBody>
             </Table>
+                )
+            }
+            
         </div>
     )
 }

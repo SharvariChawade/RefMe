@@ -10,6 +10,7 @@ import { Button } from './ui/button'
 import { useParams } from 'react-router-dom'
 import { Loader2 } from 'lucide-react'
 import { REFERRALPOST_API_END_POINT } from '@/utils/constant'
+import { APPLICATION_API_END_POINT } from '@/utils/constant'
 import { setSingleReferralPost } from '@/redux/referralpostSlice'
 
 

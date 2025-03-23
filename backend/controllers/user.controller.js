@@ -47,7 +47,7 @@ export const login = async (req,res) => {
                 success: false
             });
         };
-        let user = await User.findOne({email}).populate("profile.company");
+        let user = await User.findOne({email}).populate("profile.company").populate("referralRequested.referrer").populate("referralRequested.referrer.profile.company").populate("referralRequests");
         if(!user){
             return res.status(400).json({
                 message: "Incorrect email",

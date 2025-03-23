@@ -14,6 +14,7 @@ import { APPLICATION_API_END_POINT } from '@/utils/constant'
 import useGetEmployeesByCompany from '@/hooks/useGetEmployeesByCompany'
 import CompanyPage from './CompanyPage'
 import { setRequested } from '@/redux/companiesSlice'
+import { setRefRequested, setUser } from '@/redux/authSlice'
 
 const RequestReferralDialog = ({ open, setOpen, employee }) => {
     const { user } = useSelector(store => store.auth);
@@ -42,8 +43,12 @@ const RequestReferralDialog = ({ open, setOpen, employee }) => {
             });
             if (res.data.success) {
                 setOpen(false);
+                let arr = user.referralRequested.slice();
+                arr.push(res.data.newReferralRequest._id);
+                // user.referralRequested = arr;
                 toast.success(res.data.message);
-                dispatch(setRequested({ employeeId: employee._id, status: true })); 
+                dispatch(setRefRequested(arr));
+                dispatch(setRequested({ employeeId: employee._id, status: true }));
             }
         } catch (error) {
             toast.error(error.response.data.message);

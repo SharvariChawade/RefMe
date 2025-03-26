@@ -66,7 +66,7 @@ const userSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId, ref: 'Application',
     }],
     referralPost:[{
-        type: mongoose.Schema.Types.ObjectId, ref: 'ReferrralPost',
+        type: mongoose.Schema.Types.ObjectId, ref: 'ReferralPost',
     }]
 }, {timestamps:true});
 

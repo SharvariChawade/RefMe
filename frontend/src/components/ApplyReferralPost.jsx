@@ -21,6 +21,8 @@ const ApplyReferralPost = ({ open, setOpen }) => {
     const postId = params.id;
     const { singlePost } = useSelector(store => store.referralpost)
     const [input, setInput] = useState({
+        jobid: "",
+        joblink: "",
         skills: user?.skills || "",
         short_description: user?.short_description || "",
         resume: user?.resume || "",
@@ -40,11 +42,11 @@ const ApplyReferralPost = ({ open, setOpen }) => {
                 },
                 withCredentials: true
             });
-            console.log(res);
             if (res.data.success) {
                 const updatedPost = await axios.get(`${REFERRALPOST_API_END_POINT}/getreferralpost/${postId}`, { withCredentials: true });
                 dispatch(setSingleReferralPost(updatedPost.data.post));
                 toast.success(res.data.message);
+                setOpen(false);
             }
         } catch (error) {
             console.log(error);
@@ -53,7 +55,6 @@ const ApplyReferralPost = ({ open, setOpen }) => {
             setLoading(false);
         }
         setOpen(false);
-        console.log(input);
     }
     return (
         <div>
@@ -64,6 +65,28 @@ const ApplyReferralPost = ({ open, setOpen }) => {
                     </DialogHeader>
                     <form onSubmit={submitHandler}>
                         <div className='grid gap-4 py-4'>
+                            <div className='grid grid-cols-4 items-center gap-4'>
+                                <Label htmlFor="jobid" className="text-right">Job ID</Label>
+                                <Input
+                                    id="jobid"
+                                    name="jobid"
+                                    type="text"
+                                    value={input.jobid}
+                                    onChange={changeEventHandler}
+                                    className="col-span-3"
+                                />
+                            </div>
+                            <div className='grid grid-cols-4 items-center gap-4'>
+                                <Label htmlFor="joblink" className="text-right">Job Link</Label>
+                                <Input
+                                    id="joblink"
+                                    name="joblink"
+                                    type="text"
+                                    value={input.joblink}
+                                    onChange={changeEventHandler}
+                                    className="col-span-3"
+                                />
+                            </div>
                             <div className='grid grid-cols-4 items-center gap-4'>
                                 <Label htmlFor="resume" className="text-right">Resume</Label>
                                 <Input

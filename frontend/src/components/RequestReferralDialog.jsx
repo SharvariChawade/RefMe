@@ -26,7 +26,9 @@ const RequestReferralDialog = ({ open, setOpen, employee }) => {
         short_description: "",
         resume:"",
         experience: "",
-        referrer:employee
+        referrer:employee,
+        jobid:"",
+        joblink:""
     });
     const changeEventHandler = (e) => {
         setInput({ ...input, [e.target.name]: e.target.value });
@@ -66,6 +68,28 @@ const RequestReferralDialog = ({ open, setOpen, employee }) => {
                     </DialogHeader>
                     <form onSubmit={submitHandler}>
                         <div className='grid gap-4 py-4'>
+                           <div className='grid grid-cols-4 items-center gap-4'>
+                                <Label htmlFor="jobid" className="text-right">Job ID</Label>
+                                <Input
+                                    id="jobid"
+                                    name="jobid"
+                                    type="text"
+                                    value={input.jobid}
+                                    onChange={changeEventHandler}
+                                    className="col-span-3"
+                                />
+                            </div>
+                            <div className='grid grid-cols-4 items-center gap-4'>
+                                <Label htmlFor="joblink" className="text-right">Job Link</Label>
+                                <Input
+                                    id="joblink"
+                                    name="joblink"
+                                    type="text"
+                                    value={input.joblink}
+                                    onChange={changeEventHandler}
+                                    className="col-span-3"
+                                />
+                            </div>
                             <div className='grid grid-cols-4 items-center gap-4'>
                                 <Label htmlFor="resume" className="text-right">Resume</Label>
                                 <Input

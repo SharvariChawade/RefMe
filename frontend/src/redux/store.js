@@ -7,8 +7,8 @@ const store = configureStore({
     reducer:{
         auth: authSlice,
         referralpost: referralpostSlice,
-        companies: companiesSlice,
+        companies: companiesSlice,   
     }
-});
+},window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
 
 export default store;

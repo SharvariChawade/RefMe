@@ -20,7 +20,6 @@ const PostDetails = () => {
     const { user } = useSelector(store => store.auth)
     const dispatch = useDispatch();
     const isApplied = singlePost?.referral_requests?.some(referral_requests=>referral_requests.applicant === user?._id);
-
     useEffect(() => {
         const fetchSingleReferralPost = async () => {
             try {

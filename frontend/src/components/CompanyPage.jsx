@@ -10,13 +10,9 @@ import useGetEmployeesByCompany from "@/hooks/useGetEmployeesByCompany";
 const CompanyPage = () => {
     const { id } = useParams(); 
     const { allCompanies } = useSelector(store => store.companies);
-    console.log(allCompanies);
-    const company = allCompanies.find((c) => c._id === id);
-    console.log(company);
-    
+    const company = allCompanies.find((c) => c._id === id); 
     useGetEmployeesByCompany(company.name);
     const { employeesByCompany}= useSelector(store => store.companies);
-
     if (!company) {
         return (
             <div className="text-center text-red-500 font-bold text-xl mt-10">

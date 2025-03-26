@@ -6,7 +6,7 @@ import authorizeRoles from "../middlewares/authorizeRoles.js";
 const router = express.Router()
 
 router.route("/postreferral").post(isAuthenticated,authorizeRoles("professional"),postReferral);
-router.route("/getallreferralpost").get(isAuthenticated,getAllReferralPost);
+router.route("/getallreferralpost").get(getAllReferralPost);
 router.route("/getreferralpost/:id").get(isAuthenticated,getReferralPostById);
 
 export default router;

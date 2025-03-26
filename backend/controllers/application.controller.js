@@ -6,7 +6,8 @@ import { User } from "../models/user.model.js"
 export const requestReferral = async (req,res) => {
     try {
         const userId = req.id;
-        const { skills, resume, experience, short_description, referrer } = req.body;
+        const { skills, resume, experience, short_description, referrer, jobid, joblink } = req.body;
+        console.log(req);
         if(!referrer){
             return res.status(400).json({
                 message: "No referrer found!",
@@ -27,13 +28,15 @@ export const requestReferral = async (req,res) => {
             resume: resume,
             experience: experience,
             short_description:short_description,
+            jobid:jobid,
+            joblink:joblink
         })
         // updating profile of referrer
-        const referrerProfile = await User.findById(referrer).populate("profile.company");
+        const referrerProfile = await User.findById(referrer);
         referrerProfile.referralRequests.push(newReferralRequest); 
         await referrerProfile.save();
         // updating profile of referral requester
-        const referralReqProfile = await User.findById(userId).populate("profile.company");
+        const referralReqProfile = await User.findById(userId);
         referralReqProfile.referralRequested.push(newReferralRequest); 
         await referralReqProfile.save();
         return res.status(201).json({
@@ -51,7 +54,7 @@ export const applyReferralPost = async (req,res) => {
     try {
         const userId = req.id;
         const postId = req.params.id;
-        const { skills, resume, experience, short_description } = req.body;
+        const { skills, resume, experience, short_description,jobid, joblink } = req.body;
         if(!postId){
             return res.status(400).json({
                 message: "Referral Post is required",
@@ -61,7 +64,7 @@ export const applyReferralPost = async (req,res) => {
         const existingApplication = await Application.findOne({referral_post:postId, applicant:userId});
         if(existingApplication){
             return res.status(400).json({
-                message: "Already applied for this referral",
+                message: "Already applied for this post",
                 success: false
             })
         }
@@ -73,12 +76,14 @@ export const applyReferralPost = async (req,res) => {
             })
         }
         const newApplication = await Application.create({
-            referral_post: postId._id,
-            applicant: userId._id,
+            referral_post: postId,
+            applicant: userId,
             skills: skills,
             resume: resume,
             experience: experience,
             short_description:short_description,
+            jobid:jobid,
+            joblink:joblink
         }) 
         post.referral_requests.push(newApplication);  
         await post.save();

@@ -2,9 +2,11 @@ import React from 'react'
 import LatestPostCards from './LatestPostCards';
 import { useSelector } from 'react-redux';
 import store from '@/redux/store';
+import useGetAllReferralPosts from '@/hooks/useGetAllReferralPosts';
 
 function LatestPosts() {
   const {allReferralPosts} = useSelector(store=>store.referralpost);
+  useGetAllReferralPosts();
   return (
     <div className='max-w-7xl mx-auto my-5'>
       <div className='flex justify-center'>

@@ -18,6 +18,8 @@ const applicationSchema = new mongoose.Schema({
     resume: {type: String, required: true},
     experience: {type: String, required: true},
     short_description: {type: String},
+    jobid: {type: String},
+    joblink: {type: String},
     status: {
         type: String,
         enum: ['pending', 'accepted','rejected'],

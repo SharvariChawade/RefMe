@@ -5,11 +5,11 @@ import Signup from './components/auth/Signup'
 import Login from './components/auth/Login'
 import Home from './components/Home'
 import ReferralPosts from './components/ReferralPosts'
-import Browse from './components/Browse'
 import { Profile } from './components/Profile'
 import PostDetails from './components/PostDetails'
 import CompanyPage from './components/CompanyPage'
 import Companies from './components/Companies'
+import CreateReferralPost from './components/CreateReferralPost'
 
 function App() {
 
@@ -30,9 +30,6 @@ function App() {
       path:`/postdetails/:id`,
       element: <PostDetails/>
     },{
-      path:'/browse',
-      element: <Browse/>
-    },{
       path:'/profile',
       element: <Profile/>
     },{
@@ -41,6 +38,9 @@ function App() {
     },{
       path:'/companies',
       element: <Companies />
+    },{
+      path:'/referralposts/createpost',
+      element:<CreateReferralPost/>
     }
   ])
   return (

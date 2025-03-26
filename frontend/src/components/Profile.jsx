@@ -10,7 +10,7 @@ import { Button } from './ui/button';
 import Footer from './shared/footer';
 import RequestedReferrals from './RequestedReferrals';
 import ReferralRequests from './ReferralRequests';
-import { setReferralRequested } from '@/redux/referralpostSlice';
+import { setReferralRequested, setReferralRequests } from '@/redux/referralpostSlice';
 
 export const Profile = () => {
     const { user } = useSelector(store => store.auth);
@@ -24,8 +24,14 @@ export const Profile = () => {
         }
         
     },[user,dispatch])
-    
     const referralRequested = useSelector(store => store.referralpost?.referralRequested)
+    useEffect(()=>{
+        if(user?.referralRequests){
+            dispatch(setReferralRequests(user?.referralRequests));
+        }
+        
+    },[user,dispatch])
+    const referralRequests = useSelector(store => store.referralpost?.referralRequests)
     return (
         <div>
             <Navbar />
@@ -98,7 +104,7 @@ export const Profile = () => {
                         <div className='flex justify-center'>
                             <h1 className='font-bold text-lg my-5'>Referral Requests</h1>
                         </div>
-                        <ReferralRequests />
+                        <ReferralRequests allReferralRequests={referralRequests}/>
                     </div>
                 </div>
 

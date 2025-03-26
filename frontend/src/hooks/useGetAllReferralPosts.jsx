@@ -11,11 +11,9 @@ const useGetAllReferralPosts = () => {
         const fetchAllReferralPosts = async () => {
             try {
                 const res = await axios.get(`${REFERRALPOST_API_END_POINT}/getallreferralpost`, {
-                    headers: { "Content-Type": "application/json" },
-                    withCredentials: true,
+                    headers: { "Content-Type": "application/json" }
                 });
                 if (res.data.success) {
-                    // console.log(res);
                     dispatch(setAllReferralPosts(res.data.posts));
                 }
             } catch (error) {

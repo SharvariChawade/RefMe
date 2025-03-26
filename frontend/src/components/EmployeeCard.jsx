@@ -9,16 +9,14 @@ const EmployeeCard = ({ employee }) => {
     const [open, setOpen] = useState(false);
     const {isRequested} = useSelector(store => store.companies);
     const dispatch = useDispatch();
-    const requested = isRequested[employee._id] || false;
+    // const requested = isRequested[employee._id] || false;
 
     // ✅ Update Redux on component mount
     useEffect(() => {
         const alreadyRequested = user?.referralRequested?.some(applicationId =>
             employee?.referralRequests?.includes(applicationId)
         );
-        dispatch(setRequested({ employeeId: employee._id, status: alreadyRequested }));
-        console.log(isRequested);
-        
+        dispatch(setRequested({ employeeId: employee._id, status: alreadyRequested })); 
     }, [dispatch, user, employee]);
     return (
         <div className="flex justify-between p-2 border rounded-lg">
@@ -28,14 +26,15 @@ const EmployeeCard = ({ employee }) => {
             </div>
             <div>
             {
+                
                 (user?._id != employee?._id) ? (
                     <Button
-                        disabled={requested ||(user?._id != employee?._id)}
-                        onClick={requested ? undefined : () => setOpen(true)}
-                        className={`px-1 py-2 rounded-lg font-semibold transition ${requested ? "bg-[#F99002] cursor-not-allowed" : "bg-[#F99002] hover:bg-[#F99002] text-white"
+                        disabled={isRequested[employee._id]}
+                        onClick={isRequested[employee._id] ? undefined : () => setOpen(true)}
+                        className={`px-1 py-2 rounded-lg font-semibold transition ${isRequested[employee._id] ? "bg-[#F99002] cursor-not-allowed" : "bg-[#F99002] hover:bg-[#F99002] text-white"
                             }`}
                     >
-                        {requested ? "Referral Requested" : "Request Referral"}
+                        {isRequested[employee._id] ? "Referral Requested" : "Request Referral"}
                     </Button>
                 ) :("")
             }

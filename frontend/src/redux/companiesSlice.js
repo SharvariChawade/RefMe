@@ -13,15 +13,11 @@ const companiesSlice = createSlice({
         setEmployeesByCompany:(state,action) => {
             state.employeesByCompany = action.payload;
         },
-        // setRequested:(state,action) => {
-        //     state.isRequested = action.payload
-        // },
         setRequested: (state, action) => {
             const { employeeId, status } = action.payload;
             if(state.isRequested[employeeId]!=true){
                 state.isRequested[employeeId] = status; 
             }
-             // ✅ Update request status per employee
         }
     }
 });

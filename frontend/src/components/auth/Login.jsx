@@ -12,6 +12,7 @@ import { toast } from 'sonner'
 import { useDispatch, useSelector } from 'react-redux'
 import { setLoading, setUser } from '@/redux/authSlice'
 import { Loader2 } from 'lucide-react'
+import { setRequested } from '@/redux/companiesSlice'
 
 function Login() {
     const navigate = useNavigate();
@@ -35,6 +36,7 @@ function Login() {
                 });
                 if(res.data.success){
                     dispatch(setUser(res.data.user));
+                    dispatch(setRequested({}));
                     navigate("/");
                     toast.success(res.data.message);
                 }

@@ -7,7 +7,6 @@ import Footer from './shared/Footer'
 import useGetAllReferralPosts from '@/hooks/useGetAllReferralPosts'
 
 function Home() {
-  useGetAllReferralPosts();
   return (
     <div>
       <Navbar />

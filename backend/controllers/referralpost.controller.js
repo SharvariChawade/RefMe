@@ -3,8 +3,9 @@ import { User } from "../models/user.model.js";
 
 export const postReferral = async (req,res) => {
     try {
-        const {description, requirements, location} = req.body;
+        const {description, requirements, location, company} = req.body;
         const userId = req.id;
+        console.log(req.body);
         if(!userId){
             return res.status(400).json({
                 message: "User no authenticated",
@@ -17,28 +18,28 @@ export const postReferral = async (req,res) => {
                 success: false
             })
         };
-        const user = await User.findById(userId);
-        if(!user.profile.company){
+        if(!company){
             return res.status(400).json({
                 message: "You need to be part of a company to post referrals",
                 success: false
             })
         };
+        const user = await User.findById(userId);
+        
+        
         const referralpost = await ReferralPost.create({
-            company: user.profile.company._id,
+            company: company,
             description, 
             requirements, 
             location, 
-            created_by: user._id
+            created_by: userId
         });
         const post = await ReferralPost.findOne({_id:referralpost._id});
-
         if (!user.referralPost) {
             user.referralPost = [];
         }
         user.referralPost.push(post);
         await user.save();
-
         return res.status(201).json({
             message: "Referral Post posted succesfully",
             post,

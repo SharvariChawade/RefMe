@@ -47,7 +47,25 @@ export const login = async (req,res) => {
                 success: false
             });
         };
-        let user = await User.findOne({email}).populate("profile.company").populate("referralRequested.referrer").populate("referralRequested.referrer.profile.company").populate("referralRequests");
+        let user = await User.findOne({email})
+        .populate("profile.company")
+        .populate({
+            path: "referralRequests",
+            select: "status referrer applicant createdAt",
+            populate: [
+                { path: "referrer", select: "fullname email role profile.company", populate: { path: "profile.company", select: "name industry location" } },
+                { path: "applicant", select: "fullname email role profile.company", populate: { path: "profile.company", select: "name industry location" } }
+            ]
+        })
+        .populate({
+            path: "referralRequested",
+            select: "status referrer applicant createdAt",
+            populate: [
+                { path: "referrer", select: "fullname email role profile.company", populate: { path: "profile.company", select: "name industry location" } },
+                { path: "applicant", select: "fullname email role profile.company", populate: { path: "profile.company", select: "name industry location" } }
+            ]
+        })
+        .populate("referralPost");
         if(!user){
             return res.status(400).json({
                 message: "Incorrect email",
@@ -82,13 +100,11 @@ export const login = async (req,res) => {
         // //     profile:user.profile
         // // }
         // user = await User.findById(userId).populate("profile.company");
-        console.log(user);
         return res.status(200).cookie("token",token, {maxAge:1*24*60*60*1000, httpsOnly: true, sameSite: 'strict'}).json({
             message:`Welcome back ${user.fullname}`,
             user,
             success:true
         })
-
     }catch(error){
         console.log(error);
     }
